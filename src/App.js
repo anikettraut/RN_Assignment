@@ -40,17 +40,12 @@ const App = () => {
 
   const searchFilterFunction = (text) => {
     if (text) {
-      const newData = masterDataSource.filter(function (item) {
-        const itemData = item.State
-          ? item.State.toUpperCase()
-          : "".toUpperCase();
-        const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1;
-      });
+      const newData = masterDataSource.filter((item) =>
+        item.State.toUpperCase().startsWith(text)
+      );
+
       setFilteredDataSource(
-        newData.sort(
-          (a, b) => parseFloat(a.Population) - parseFloat(b.Population)
-        )
+        newData.sort((a, b) => a.State.localeCompare(b.State))
       );
       setSearch(text);
     } else {
@@ -91,7 +86,7 @@ const App = () => {
         )}
         <TextInput
           style={style.textInputStyle}
-          onChangeText={(text) => searchFilterFunction(text)}
+          onChangeText={(text) => searchFilterFunction(text.toUpperCase())}
           value={search}
           underlineColorAndroid="transparent"
           placeholder="Filter"
